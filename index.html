@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<title>Growth Audit — Easy Expense</title>
+<link rel="icon" href="img/logo-mark-a.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: only light;
+  /* ---- Easy Expense, extracted from their live screens ---- */
+  --ee-bg:#FBFCFF; --ee-card:#FFFFFF; --ee-line:#D9DEE8; --ee-hair:#E7E9EE;
+  --ee-blue:#1369E3; --ee-blue-dk:#0F58C4; --ee-soft:#F2F7FC; --ee-softline:#ACCAF5;
+  --ee-navy:#283F5F; --ee-green:#2DBE6C; --ee-lilac:#E1E0FC; --ee-violet:#6C63D9;
+  --ee-ink:#262626; --ee-txt:#3D3D3D; --ee-muted:#737373; --ee-mute2:#9A9A9A;
+  --ee-off:#737373; --ee-track:#E9E9EE;
+  --r-ctl:10px; --r-media:28px;
+  /* ---- the report shell, in Easy Expense's own palette ---- */
+  --bg:#F6F8FD; --bg2:#FFFFFF; --surf:#FFFFFF;
+  --hair:rgba(38,38,38,.09); --hair2:rgba(38,38,38,.16);
+  --ink:#1F2430; --ink2:#4E5563; --ink3:#868C98;
+  --accent:#1369E3; --accent-lift:#0E5BCB;
+  --panel:#FFFFFF; --panel-ink:#15181B; --panel-muted:#5F666D; --panel-line:#E9ECEF;
+  --accent-ink:#0B4FB0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+@media(max-width:700px){.wrap{padding:0 20px}}
+
+/* ============ top bar ============ */
+.nav{position:sticky;top:0;z-index:70;background:rgba(246,248,253,.86);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--hair)}
+.nav-in{max-width:1080px;margin:0 auto;padding:0 32px;height:58px;display:flex;align-items:center;gap:18px}
+@media(max-width:700px){.nav-in{padding:0 16px;gap:12px}}
+.nav-brand{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.nav-brand img{width:26px;height:26px;flex:none;display:block;border-radius:6px}
+.nav-brand span{color:var(--ink2);font-weight:500}
+.nav-brand b{color:var(--ink);font-weight:600}
+.nav-links{margin-left:auto;display:flex;gap:2px;align-items:center}
+.nav-links button{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink3);transition:.16s}
+.nav-links button:hover{color:var(--ink)}
+.nav-links button.on{color:var(--ink);background:#fff;box-shadow:0 1px 4px rgba(38,38,38,.08)}
+@media(max-width:640px){.nav-brand span{display:none}}
+
+.view{display:none}
+.view.on{display:block}
+
+/* ============ hero ============ */
+.hero{padding:104px 0 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-340px;left:50%;transform:translateX(-50%);
+  width:1100px;height:640px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(19,105,227,.15),transparent 72%)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(40% 50% at 8% 20%,rgba(225,224,252,.75),transparent 70%),
+   radial-gradient(38% 45% at 92% 18%,rgba(250,204,92,.22),transparent 70%)}
+.hero>*{position:relative;z-index:1}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-lift);margin-bottom:26px}
+.hero h1{font-size:76px;line-height:.98;font-weight:700;letter-spacing:-.045em;margin:0 0 24px}
+@media(max-width:820px){.hero h1{font-size:50px}.hero{padding-top:70px}}
+.hero .lede{font-size:20px;line-height:1.5;font-weight:400;color:var(--ink2);max-width:600px;margin:0 auto;letter-spacing:-.012em}
+@media(max-width:820px){.hero .lede{font-size:17px}}
+.hero .meta{margin-top:30px;font-size:12.5px;color:var(--ink3);letter-spacing:.02em}
+.hero .meta b{color:var(--ink2);font-weight:600}
+
+.stats{display:flex;justify-content:center;gap:0;margin:70px auto 0;max-width:760px;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.stat{flex:1;padding:26px 14px;text-align:center;border-left:1px solid var(--hair)}
+.stat:first-child{border-left:none}
+.stat b{display:block;font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.stat span{display:block;font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.35}
+@media(max-width:700px){.stat b{font-size:19px}.stat{padding:18px 8px}}
+
+.fb{max-width:760px;margin:0 auto;padding:30px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:26px;text-align:left}
+@media(max-width:700px){.fb{grid-template-columns:1fr;gap:20px;padding-top:24px}}
+.fb-k{grid-column:1/-1;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink3);text-align:center;margin-bottom:-6px}
+.fb-i{display:flex;gap:12px;align-items:flex-start}
+.fb-i .tick{width:18px;height:18px;flex:none;margin-top:3px;border-radius:50%;background:rgba(19,105,227,.13);
+  display:grid;place-items:center}
+.fb-i .tick svg{width:10px;height:10px;stroke:var(--accent-lift);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.fb-i p{font-size:14px;line-height:1.55;color:var(--ink2);margin:0}
+.fb-i p b{color:var(--ink);font-weight:700}
+
+.sec{padding:96px 0}
+.sec-k{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.sec h2{font-size:38px;line-height:1.14;font-weight:700;letter-spacing:-.035em;margin:0 0 20px;max-width:680px}
+@media(max-width:820px){.sec h2{font-size:29px}.sec{padding:64px 0}}
+.sec p.body{font-size:17px;line-height:1.66;color:var(--ink2);max-width:640px;margin:0 0 18px;letter-spacing:-.008em}
+.sec p.body b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--hair);margin:0}
+
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;max-width:820px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surf);border:1px solid var(--hair);box-shadow:0 2px 10px rgba(38,38,38,.04);border-radius:16px;padding:24px 26px}
+.note h4{font-size:15px;font-weight:700;letter-spacing:-.015em;margin:0 0 8px}
+.note p{font-size:14px;line-height:1.6;color:var(--ink2);margin:0}
+
+.ideas{display:flex;flex-direction:column;gap:0;margin-top:14px;border-top:1px solid var(--hair)}
+.idea{display:grid;grid-template-columns:52px 1fr 180px;gap:26px;align-items:start;
+  padding:30px 4px;border-bottom:1px solid var(--hair);text-align:left;width:100%;transition:.18s}
+.idea:hover{background:rgba(255,255,255,.75)}
+@media(max-width:780px){.idea{grid-template-columns:38px 1fr;gap:16px}}
+.idea .no{font-size:13px;font-weight:700;color:var(--ink3);padding-top:4px;letter-spacing:.02em}
+.idea h3{font-size:21px;line-height:1.25;font-weight:700;letter-spacing:-.024em;margin:0 0 7px}
+@media(max-width:820px){.idea h3{font-size:18px}}
+.idea p{font-size:14.5px;line-height:1.6;color:var(--ink2);margin:0;max-width:540px}
+.idea .out{text-align:right;padding-top:3px}
+@media(max-width:780px){.idea .out{grid-column:2;text-align:left;padding-top:12px}}
+.idea .out b{display:block;font-size:19px;font-weight:700;letter-spacing:-.025em;color:var(--accent-lift);white-space:nowrap}
+.idea .out span{display:block;font-size:10.5px;color:var(--ink3);margin-top:3px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.idea .seeit{display:inline-flex;align-items:center;gap:5px;margin-top:11px;font-size:12.5px;
+  font-weight:600;color:var(--accent-lift)}
+.idea .seeit svg{width:12px;height:12px}
+
+.band{background:var(--surf);border:1px solid var(--hair);border-radius:28px;box-shadow:0 2px 10px rgba(38,38,38,.04);padding:40px 44px;margin-top:44px;
+  display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+@media(max-width:700px){.band{padding:28px 24px;gap:22px}}
+.band .lab{font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.band .txt{flex:1;min-width:240px}
+.band .txt p{font-size:15.5px;line-height:1.6;color:var(--ink2);margin:0}
+.band .nums{display:flex;gap:34px}
+.band .nums div b{display:block;font-size:30px;font-weight:700;letter-spacing:-.035em;color:var(--accent-lift)}
+.band .nums div span{display:block;font-size:11px;color:var(--ink3);margin-top:2px;letter-spacing:.04em;
+  text-transform:uppercase;font-weight:600}
+
+.cta-row{display:flex;justify-content:center;margin-top:52px;align-items:center;gap:22px;flex-wrap:wrap}
+.bigbtn{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;padding:15px 26px;border-radius:30px;transition:.16s}
+.bigbtn:hover{filter:brightness(1.1)}
+.bigbtn svg{width:15px;height:15px}
+
+.foot{border-top:1px solid var(--hair);padding:36px 0 70px;font-size:12.5px;line-height:1.6;color:var(--ink3)}
+
+/* ============ prototype stage ============ */
+.stage{display:grid;grid-template-columns:minmax(440px,1fr) minmax(400px,470px);gap:0;
+  align-items:start;min-height:calc(100vh - 58px)}
+@media(max-width:1080px){.stage{grid-template-columns:1fr}}
+.phonecol{padding:34px 24px 46px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.panelcol{border-left:1px solid var(--hair);background:var(--panel);color:var(--panel-ink);
+  min-height:calc(100vh - 58px);position:sticky;top:58px;max-height:calc(100vh - 58px);overflow-y:auto}
+@media(max-width:1080px){.panelcol{position:static;max-height:none;border-left:none;border-top:1px solid var(--hair)}}
+
+.phone{position:relative;width:390px;height:844px;flex:none;background:#000;border:11px solid #000;
+  border-radius:46px;box-shadow:0 0 0 1.5px #D3D9E4,0 34px 70px -22px rgba(31,36,48,.35)}
+.phone-in{position:absolute;inset:0;border-radius:36px;overflow:hidden;background:var(--ee-bg);color-scheme:only light}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;
+  border-radius:16px;z-index:60;pointer-events:none}
+.sbar{position:absolute;top:0;left:0;right:0;height:50px;z-index:55;pointer-events:none;display:flex;
+  align-items:center;justify-content:space-between;padding:14px 28px 0 34px;font:600 15px/1 'Poppins',sans-serif;color:#111;transition:color .3s}
+.sbar.light{color:#fff}
+.sbar .glyphs{display:flex;gap:5px;align-items:center}
+.homebar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:134px;height:5px;
+  border-radius:3px;background:#111;z-index:56;pointer-events:none;transition:background .3s}
+.homebar.light{background:rgba(255,255,255,.9)}
+.screenwrap{position:absolute;inset:0;overflow:hidden;background:var(--ee-bg)}
+
+/* ============ phone screens — Easy Expense's system, all prefixed scr-/ee- ============ */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--ee-bg);color:var(--ee-ink);
+  font-family:'Poppins',-apple-system,sans-serif;
+  transform:translateX(100%);transition:transform .36s cubic-bezier(.32,.72,0,1);z-index:10;will-change:transform}
+.scr.is-active{transform:translateX(0);z-index:20}
+.scr.is-past{transform:translateX(-24%)}
+.scr.sheet{transform:translateY(100%)}
+.scr.sheet.is-active{transform:translateY(0);z-index:30}
+.scr.nofx{transition:none}
+.scr-top{flex:none;padding:56px 14px 0;position:relative;z-index:2}
+.scr-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 14px;scrollbar-width:none;position:relative;z-index:2}
+.scr-body::-webkit-scrollbar{display:none}
+.scr-foot{flex:none;padding:12px 14px 30px;position:relative;z-index:2}
+
+/* progress: their segmented bar */
+.ee-prog{display:flex;gap:9px;height:5px;margin-top:6px}
+.ee-prog i{flex:1;border-radius:3px;background:#D6D6DA;transition:background .3s}
+.ee-prog i.on{background:#111}
+.ee-back{position:absolute;left:8px;top:48px;width:30px;height:30px;display:none}
+.ee-h{font-size:24.5px;line-height:1.27;font-weight:700;letter-spacing:-.012em;margin:18px 0 0;color:var(--ee-ink)}
+.ee-sub{font-size:15px;line-height:1.45;color:var(--ee-muted);margin:8px 0 0;font-weight:400}
+
+.ee-btn{display:block;width:100%;height:56px;border-radius:12px;background:var(--ee-blue);color:#fff;
+  font:600 18px/1 'Poppins',sans-serif;letter-spacing:-.005em;transition:filter .15s}
+.ee-btn:hover{filter:brightness(1.06)}
+.ee-btn[disabled]{background:var(--ee-off);cursor:default;filter:none}
+.ee-softbtn{display:block;width:100%;height:52px;border-radius:12px;background:var(--ee-soft);color:var(--ee-blue);
+  font:600 17px/1 'Poppins',sans-serif;margin-bottom:10px}
+.ee-link{display:block;width:100%;margin-top:14px;font:500 15.5px/1.3 'Poppins',sans-serif;color:var(--ee-blue);text-align:center}
+.ee-signin{font-size:15px;color:var(--ee-txt);text-align:center;margin-top:16px;font-weight:400}
+.ee-signin b{color:var(--ee-blue);font-weight:500}
+
+/* welcome */
+.scr--welcome .scr-body{display:flex;flex-direction:column;align-items:center;padding-top:68px}
+.ee-mock{display:block;width:232px;height:auto}
+.ee-logo{display:block;width:196px;height:auto;margin:22px 0 0 2px;align-self:flex-start}
+
+/* option cards: emoji + bold title + small line */
+.ee-opts{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+.ee-opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--ee-card);border:1.5px solid var(--ee-line);
+  border-radius:var(--r-ctl);padding:12px 12px;min-height:72px;transition:.15s}
+.ee-opt .em{font-size:33px;line-height:1;width:40px;flex:none;text-align:center;font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif}
+.ee-opt b{display:block;font-size:19.5px;line-height:1.2;font-weight:700;color:var(--ee-ink);letter-spacing:-.01em}
+.ee-opt small{display:block;font-size:12.5px;line-height:1.35;color:var(--ee-txt);margin-top:2px}
+.ee-opt.on{border-color:var(--ee-blue);background:var(--ee-soft);box-shadow:0 0 0 1px var(--ee-blue) inset}
+.ee-opt .ring{width:30px;height:30px;flex:none;border-radius:50%;border:2.4px solid var(--ee-ink);display:grid;place-items:center;margin:0 4px 0 2px}
+.ee-opt .ring svg{width:15px;height:15px;stroke:var(--ee-ink);stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ee-opt.on .ring{background:var(--ee-blue);border-color:var(--ee-blue)}
+.ee-opt.on .ring svg{stroke:#fff}
+
+/* industry search */
+.ee-search{display:flex;align-items:center;gap:10px;height:48px;border:2px solid var(--ee-blue);border-radius:var(--r-ctl);padding:0 12px;margin-top:14px;background:var(--ee-card)}
+.ee-search svg{width:22px;height:22px;stroke:var(--ee-blue);stroke-width:2.4;fill:none;flex:none}
+.ee-search input{flex:1;min-width:0;border:none;outline:none;background:transparent;font:400 16.5px/1 'Poppins',sans-serif;color:var(--ee-ink)}
+.ee-search input::placeholder{color:#9A9AA0}
+.ee-grp{font-size:17px;font-weight:700;color:var(--ee-ink);margin:18px 0 4px}
+.ee-ind{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 0;border-bottom:1px solid var(--ee-hair);
+  font:400 17px/1.25 'Poppins',sans-serif;color:var(--ee-ink);transition:.12s}
+.ee-ind .em{font-size:20px;width:24px;text-align:center;font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif}
+.ee-ind.on{color:var(--ee-blue);font-weight:600}
+.ee-ind.on::after{content:'✓';margin-left:auto;color:var(--ee-blue);font-weight:700}
+
+/* loader */
+.scr--load .scr-body{padding-top:10px}
+.ee-squig{display:block;width:134px;height:134px;margin:10px auto 0;animation:eespin 3.2s linear infinite}
+@keyframes eespin{to{transform:rotate(360deg)}}
+.ee-ai{font-size:13px;font-weight:700;letter-spacing:.04em;color:#6E6E6E;text-align:center;margin-top:24px}
+.ee-loadh{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:-.01em;text-align:center;color:var(--ee-ink);margin:8px 0 0}
+.ee-loadh em{font-style:normal;color:var(--ee-blue)}
+.ee-proc{font-size:13px;font-weight:700;letter-spacing:.03em;color:#B5B5B5;text-align:center;margin-top:20px}
+.ee-wohead{display:flex;align-items:center;justify-content:space-between;margin:30px 4px 10px;opacity:0;transition:opacity .3s}
+.ee-wohead.on{opacity:1}
+.ee-wohead b{font-size:15px;font-weight:700;letter-spacing:.02em;color:var(--ee-ink)}
+.ee-found{font-size:14px;font-weight:700;color:var(--ee-blue);background:#E3EDFC;border:1.5px solid var(--ee-blue);border-radius:7px;padding:3px 9px;letter-spacing:.03em}
+.ee-wo{display:flex;flex-direction:column;gap:10px}
+.ee-wrow{display:flex;align-items:center;gap:14px;background:var(--ee-card);border:1.5px solid var(--ee-line);border-radius:var(--r-ctl);padding:7px 10px;
+  font:500 17px/1.2 'Poppins',sans-serif;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.ee-wrow.on{opacity:1;transform:none}
+.ee-wrow .ic{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;font-size:21px;flex:none;font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif}
+
+/* first scan */
+.scr--scan .scr-body{display:flex;flex-direction:column;align-items:center}
+.ee-scanh{font-size:24.5px;font-weight:700;letter-spacing:-.012em;text-align:center;margin:16px 0 0;color:var(--ee-ink)}
+.ee-scanimg{display:block;width:236px;height:auto;margin:30px auto 0}
+
+/* paywall: their free-trial timeline */
+.ee-paybar{display:flex;align-items:center;justify-content:space-between;height:40px}
+.ee-x{width:40px;height:40px;margin-left:-8px;display:grid;place-items:center;color:var(--ee-ink);border-radius:50%}
+.ee-x svg{width:22px;height:22px}
+.ee-help{display:flex;align-items:center;gap:7px;font:600 19px/1 'Poppins',sans-serif;color:var(--ee-blue)}
+.ee-help svg{width:24px;height:24px;stroke:var(--ee-blue);stroke-width:1.8;fill:none}
+.ee-logout{font:400 18px/1 'Poppins',sans-serif;color:var(--ee-ink)}
+.ee-payh{font-size:23px;line-height:1.24;font-weight:700;letter-spacing:-.015em;color:var(--ee-ink);margin:12px 4px 0}
+.ee-payh em{font-style:normal;color:var(--ee-blue)}
+.ee-paysub{font-size:13.5px;line-height:1.4;color:var(--ee-muted);margin:6px 4px 0}
+.ee-tlh{font-size:17px;font-weight:700;color:var(--ee-ink);margin:12px 4px 0}
+.ee-tl{position:relative;margin:10px 0 0;padding-left:4px}
+.ee-tl::before{content:'';position:absolute;left:19px;top:18px;bottom:18px;width:9px;background:var(--ee-track);border-radius:5px}
+.ee-tl::after{content:'';position:absolute;left:19px;top:18px;height:62px;width:9px;background:var(--ee-lilac);border-radius:5px}
+.ee-ti{position:relative;z-index:1;display:flex;gap:14px;align-items:flex-start;padding-bottom:10px}
+.ee-ti .c{width:38px;height:38px;flex:none;border-radius:50%;background:#F1F1F4;display:grid;place-items:center}
+.ee-ti .c svg{width:20px;height:20px;stroke:var(--ee-ink);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ee-ti.done .c{background:var(--ee-lilac)}
+.ee-ti.done .c svg{stroke:var(--ee-violet);stroke-width:2.2}
+.ee-ti.now .c{background:var(--ee-lilac);box-shadow:0 0 0 7px rgba(225,224,252,.55)}
+.ee-ti b{display:block;font-size:17px;font-weight:500;color:var(--ee-ink);line-height:1.25;margin-top:2px}
+.ee-ti.done b{color:var(--ee-violet);text-decoration:line-through}
+.ee-ti small{display:block;font-size:12.5px;color:var(--ee-txt);line-height:1.35;margin-top:2px}
+.ee-proof{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--ee-card);border:1.5px solid var(--ee-line);border-radius:var(--r-ctl);margin:2px 0 0}
+.ee-proof>div{padding:10px 12px}
+.ee-proof>div+div{border-left:1.5px solid var(--ee-hair)}
+.ee-proof b{display:block;font-size:19px;font-weight:700;color:var(--ee-ink);line-height:1.15}
+.ee-proof b .st{color:#F4B400;font-size:13px;letter-spacing:1px;margin-left:4px;vertical-align:2px}
+.ee-proof small{display:block;font-size:11.5px;line-height:1.3;color:var(--ee-muted);margin-top:3px}
+.ee-quote{grid-column:1/-1;border-top:1.5px solid var(--ee-hair);padding:9px 12px 10px !important;font-size:12.5px;line-height:1.4;color:var(--ee-txt);border-left:none !important}
+.ee-quote i{font-style:normal;color:var(--ee-muted)}
+.ee-price{font-size:16px;line-height:1.4;color:var(--ee-ink);text-align:center;margin:0 0 12px}
+
+/* all plans */
+.ee-plh{font-size:27px;line-height:1.25;font-weight:500;text-align:center;color:var(--ee-ink);margin:4px 0 0}
+.ee-plsub{font-size:15px;color:var(--ee-muted);text-align:center;margin-top:6px}
+.ee-tog{display:flex;width:252px;margin:14px auto 0;background:var(--ee-card);border-radius:34px;box-shadow:0 4px 14px rgba(0,0,0,.12);padding:3px}
+.ee-tog button{flex:1;height:62px;border-radius:31px;font:500 19px/1.1 'Poppins',sans-serif;color:var(--ee-ink);border:1.5px solid transparent}
+.ee-tog button small{display:block;font-size:11.5px;color:#1E9E52;font-weight:500;margin-top:2px}
+.ee-tog button.on{background:var(--ee-soft);border-color:var(--ee-blue);color:var(--ee-blue)}
+.ee-pc{border-radius:18px;padding:16px 14px 16px;margin-top:16px;background:var(--ee-card);border:1.5px solid var(--ee-line)}
+.ee-pc.pro{background:var(--ee-navy);border-color:var(--ee-navy);color:#fff}
+.ee-pop{font-size:12.5px;font-weight:500;letter-spacing:.02em;color:#fff}
+.ee-tag{display:inline-block;margin-top:8px;font:500 16px/1 'Poppins',sans-serif;padding:6px 12px;border-radius:14px;background:#EBEBEB;color:var(--ee-ink)}
+.ee-pc.pro .ee-tag{background:#fff;color:var(--ee-navy)}
+.ee-pdesc{font-size:15px;line-height:1.4;color:var(--ee-muted);margin-top:10px}
+.ee-pc.pro .ee-pdesc{color:rgba(255,255,255,.9)}
+.ee-amt{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+.ee-amt b{font-size:31px;font-weight:600;letter-spacing:-.01em}
+.ee-amt span{font-size:11.5px;font-weight:500;line-height:1.2;color:var(--ee-txt)}
+.ee-pc.pro .ee-amt span{color:rgba(255,255,255,.85)}
+.ee-was{font-size:12.5px;font-weight:500;margin-top:2px}
+.ee-was s{opacity:.7}
+.ee-trialn{font-size:12.5px;color:var(--ee-muted);margin-top:8px}
+.ee-trialn em{font-style:normal;color:#1E9E52}
+.ee-pc.pro .ee-trialn,.ee-pc.pro .ee-trialn em{color:rgba(255,255,255,.88)}
+.ee-pcbtn{display:block;width:100%;height:48px;border-radius:24px;margin-top:12px;font:500 18px/1 'Poppins',sans-serif;color:var(--ee-blue);background:var(--ee-soft);border:1.5px solid var(--ee-blue)}
+.ee-pc.pro .ee-pcbtn{background:#fff;border-color:#fff}
+.ee-feats{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.ee-feats div{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.3}
+.ee-gck{width:19px;height:19px;flex:none;border-radius:50%;background:var(--ee-green);display:grid;place-items:center;margin-top:1px}
+.ee-gck svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* offer on close: comparison-led, direct purchase */
+.scr--offer{background:var(--ee-bg)}
+.ee-oh{font-size:25px;line-height:1.24;font-weight:700;letter-spacing:-.015em;color:var(--ee-ink);margin:8px 4px 0}
+.ee-osub{font-size:14.5px;line-height:1.45;color:var(--ee-muted);margin:6px 4px 0}
+.ee-cmp{margin-top:16px;background:var(--ee-card);border:1.5px solid var(--ee-line);border-radius:18px;overflow:hidden}
+.ee-cmp .row{display:grid;grid-template-columns:1fr 64px 64px;align-items:center;min-height:38px;padding:0 10px 0 14px;border-top:1px solid var(--ee-hair);font-size:13.5px;line-height:1.3;color:var(--ee-txt)}
+.ee-cmp .row:first-child{border-top:none}
+.ee-cmp .hd{min-height:48px;font-size:12.5px;font-weight:600;color:var(--ee-ink)}
+.ee-cmp .hd span{text-align:center}
+.ee-cmp .hd .st{background:var(--ee-navy);color:#fff;border-radius:10px;padding:5px 0}
+.ee-cmp .c{display:grid;place-items:center}
+.ee-cmp .dash{width:12px;height:2px;background:#C9CCD3;border-radius:1px}
+.ee-ocard{margin-top:14px;background:var(--ee-navy);border-radius:18px;padding:14px 16px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ee-ocard .t{font-size:13px;font-weight:500;color:rgba(255,255,255,.85)}
+.ee-ocard .t b{display:block;font-size:17px;font-weight:600;color:#fff}
+.ee-ocard .p{text-align:right}
+.ee-ocard .p b{display:block;font-size:26px;font-weight:600;line-height:1}
+.ee-ocard .p span{font-size:11px;font-weight:500;color:rgba(255,255,255,.85)}
+.ee-otrust{font-size:13px;color:var(--ee-muted);text-align:center;margin:0 0 10px}
+
+/* sign-up, now after purchase */
+.ee-paid{display:inline-flex;align-items:center;gap:7px;margin:4px auto 0;background:#E6F6EC;color:#1A7F45;border-radius:16px;padding:6px 12px;font:600 13px/1 'Poppins',sans-serif}
+.ee-paid .ee-gck{width:16px;height:16px;margin:0}
+.ee-shield{display:block;width:56px;height:62px;margin:18px auto 0}
+.ee-suh{font-size:26px;line-height:1.24;font-weight:700;text-align:center;letter-spacing:-.012em;color:var(--ee-ink);margin:12px 6px 0}
+.ee-div{display:flex;align-items:center;gap:12px;margin:26px 0 14px;font-size:15px;color:#8A8A8A;letter-spacing:.04em}
+.ee-div::before,.ee-div::after{content:'';flex:1;height:1.5px;background:#CFCFD4}
+.ee-email{display:flex;align-items:center;gap:12px;height:56px;border:1.5px solid #2B2B2B;border-radius:var(--r-ctl);padding:0 14px;background:var(--ee-card)}
+.ee-email svg{width:26px;height:26px;stroke:var(--ee-ink);stroke-width:1.6;fill:none;flex:none}
+.ee-email span{font-size:18px;color:#A9A9AE}
+.ee-apple{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:8px;background:#000;color:#fff;font:500 18px/1 -apple-system,'Helvetica Neue',sans-serif}
+.ee-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:6px;background:var(--ee-card);border:1.5px solid #8B8B8B;color:#3C3C3C;margin-top:16px;font:500 18px/1 -apple-system,'Helvetica Neue',sans-serif}
+.ee-agree{display:flex;gap:12px;align-items:flex-start;margin-top:18px;font-size:12.5px;line-height:1.4;color:var(--ee-txt)}
+.ee-agree .ck{width:30px;height:30px;flex:none;border-radius:50%;background:var(--ee-blue);display:grid;place-items:center}
+.ee-agree .ck svg{width:15px;height:15px;stroke:#fff;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* iOS tracking dialog, now after sign-up */
+.ee-att{position:absolute;inset:0;z-index:40;background:rgba(80,80,84,.55);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.ee-att.on{opacity:1;pointer-events:auto}
+.ee-attbox{width:300px;background:rgba(46,46,48,.96);border-radius:30px;padding:20px 18px 16px;color:#fff;font-family:-apple-system,'Helvetica Neue',sans-serif}
+.ee-attbox .ic{width:58px;height:58px;border-radius:14px;background:linear-gradient(160deg,#F7A541,#EF7F2E);position:relative;margin-bottom:14px}
+.ee-attbox .ic svg{position:absolute;left:10px;top:10px;width:38px;height:38px;stroke:#fff;stroke-width:2.4;fill:none}
+.ee-attbox h5{font-size:17px;line-height:1.3;font-weight:600}
+.ee-attbox p{font-size:14px;line-height:1.35;color:#B5B5BA;margin-top:6px}
+.ee-attbox button{display:block;width:100%;height:44px;border-radius:22px;background:rgba(255,255,255,.12);color:#fff;font:500 17px/1 -apple-system,'Helvetica Neue',sans-serif;margin-top:10px}
+.ee-attbox button:first-of-type{margin-top:16px}
+
+/* done: their "Setting everything up…" */
+.scr--done .scr-body{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ee-setup{font-size:17px;color:var(--ee-txt)}
+.ee-dot{width:12px;height:12px;border-radius:50%;background:#1C1B3A;margin-top:46px;animation:eepulse 1s ease-in-out infinite alternate}
+@keyframes eepulse{to{transform:scale(.6);opacity:.5}}
+
+/* dark mode — an approximation: no dark frames were supplied */
+.phone-in.dark{--ee-bg:#121417;--ee-card:#1D2126;--ee-line:#30353C;--ee-hair:#2A2E34;--ee-soft:#18273D;--ee-ink:#F3F5F6;--ee-txt:#C3C8CE;
+  --ee-muted:#8D949B;--ee-track:#2A2E34;--ee-lilac:#35335E;--ee-violet:#B5B0FF;--ee-off:#3A3F45;background:var(--ee-bg)}
+.phone-in.dark .screenwrap{background:var(--ee-bg)}
+.phone-in.dark .ee-prog i{background:#33383E}
+.phone-in.dark .ee-prog i.on{background:#F3F5F6}
+.phone-in.dark .ee-ti .c{background:#262A30}
+.phone-in.dark .ee-ti.done .c,.phone-in.dark .ee-ti.now .c{background:var(--ee-lilac)}
+.phone-in.dark .ee-ti.now .c{box-shadow:0 0 0 7px rgba(53,51,94,.5)}
+.phone-in.dark .ee-pc.pro,.phone-in.dark .ee-ocard,.phone-in.dark .ee-cmp .hd .st{background:#22344F;border-color:#22344F}
+.phone-in.dark .ee-tag{background:#2A2E34}
+.phone-in.dark .ee-tog{background:#1D2126}
+.phone-in.dark .ee-found{background:#18273D}
+.phone-in.dark .ee-email{border-color:#5A5F66}
+.phone-in.dark .ee-google{background:#1D2126;color:#E8EAEC;border-color:#5A5F66}
+.phone-in.dark .ee-apple{background:#fff;color:#000}
+.phone-in.dark .ee-apple svg{fill:#000}
+.phone-in.dark .ee-paid{background:#173A26;color:#7FD9A2}
+.phone-in.dark .ee-squig{filter:invert(1)}
+.phone-in.dark .ee-logo{filter:brightness(0) invert(.94)}
+.phone-in.dark .ee-logo.keep{filter:none}
+.phone-in.dark .ee-dot{background:#DADDE0}
+.phone-in.dark .ee-proc{color:#6A7077}
+.phone-in.dark .ee-ai{color:#9AA0A6}
+.phone-in.dark .ee-ind{border-color:#2A2E34}
+.phone-in.dark .ee-cmp .dash{background:#4A5057}
+.phone-in.dark .ee-wrow .ic{filter:saturate(.8) brightness(.55)}
+
+/* prototype toolbar, walkthrough, QR */
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:520px}
+.seg{display:inline-flex;align-items:center;background:#fff;border:1px solid #DFE4EC;border-radius:20px;padding:3px;gap:2px}
+.seg button{padding:6px 11px;border-radius:16px;font:600 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);transition:.14s}
+.seg button.on{background:var(--ink);color:#fff}
+.demo-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:20px;background:var(--accent);color:#fff;
+  font:700 12px/1 'Plus Jakarta Sans',sans-serif}
+.demo-cap{width:390px;max-width:calc(100vw - 24px);background:#fff;border:1px solid var(--hair);border-radius:16px;padding:14px 14px 12px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(31,36,48,.07)}
+.demo-cap .bar{position:absolute;left:0;top:0;right:0;height:3px;background:#EEF1F6}
+.demo-cap .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.demo-cap p{flex:1;font-size:13.5px;line-height:1.45;color:var(--ink);margin:0;font-weight:500}
+.demo-cap button{font:700 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);padding:7px 10px;border-radius:12px;border:1px solid #DFE4EC;flex:none}
+.finger{position:absolute;z-index:90;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(31,36,48,.26);
+  border:2px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;opacity:0;left:50%;top:60%;
+  transition:left .32s cubic-bezier(.4,0,.2,1),top .32s cubic-bezier(.4,0,.2,1),opacity .2s,transform .15s}
+.finger.show{opacity:1}
+.finger.press{transform:scale(.78);background:rgba(31,36,48,.4)}
+.qr{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hair);border-radius:16px;padding:10px 16px 10px 10px;text-align:left}
+.qr img{width:135px;height:135px;display:block;image-rendering:pixelated;border-radius:6px}
+.qr span{font-size:12.5px;line-height:1.45;color:var(--ink2)}
+.qr b{display:block;color:var(--ink);font-size:13.5px}
+@media(max-width:1080px){.qr{display:none}}
+
+#view-proto .tools{order:0} #view-proto .demo-cap{order:1} #view-proto .phone{order:2} #view-proto .chips{order:3}
+#view-proto .chiphint{order:4} #view-proto .qr{order:5}
+.cta-row .qr{order:2}
+/* on a phone: the prototype is the screen */
+@media(max-width:500px){
+  #view-proto .phonecol{padding:0 0 28px;gap:14px}
+  #view-proto .phone{width:100vw;height:calc(100svh - 58px);min-height:640px;border:0;border-radius:0;box-shadow:none;order:1}
+  #view-proto .phone-in{border-radius:0}
+  #view-proto .island,#view-proto .sbar,#view-proto .homebar{display:none}
+  #view-proto .scr-top{padding-top:14px !important}
+  #view-proto .scr--scan .scr-top{padding-top:24px !important}
+  #view-proto .scr-foot{padding-bottom:18px}
+  #view-proto .scr--welcome .scr-body{padding-top:20px}
+  #view-proto .tools{order:3;padding:0 12px}
+  #view-proto .demo-cap{position:fixed;left:12px;right:12px;bottom:12px;width:auto;max-width:none;z-index:95}
+  #view-proto .chips{order:4;padding:0 12px}
+  #view-proto .chiphint{order:5}
+}
+
+.herobtns{display:flex;justify-content:center;margin-top:30px}
+.ghostbtn{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--hair2);color:var(--ink);font-size:14px;
+  font-weight:700;padding:9px 20px 9px 9px;border-radius:30px;box-shadow:0 2px 12px rgba(31,36,48,.06);transition:.16s}
+.ghostbtn:hover{box-shadow:0 4px 18px rgba(31,36,48,.1)}
+.ghostbtn .pl{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.ghostbtn .pl svg{width:12px;height:12px;fill:#fff;margin-left:2px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:470px;margin:0 auto}
+.chip{padding:7px 13px;border-radius:20px;border:1px solid #DFE4EC;background:#fff;
+  font:600 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);transition:.14s}
+.chip:hover{color:var(--ink);border-color:#C5CDD9}
+.chip.offer{border-style:dashed;border-color:var(--accent);color:var(--accent-lift)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;border-style:solid}
+.chiphint{text-align:center;font-size:11px;color:var(--ink3);margin:0;max-width:430px}
+
+/* ============ the short panel ============ */
+.pn{padding:30px 30px 60px}
+.pn-n{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.pn-n.ctx{color:var(--panel-muted)}
+.pn-t{font-size:23px;line-height:1.18;font-weight:700;letter-spacing:-.028em;margin:8px 0 0;color:var(--panel-ink)}
+.pn-hyp{font-size:15px;line-height:1.62;color:#2E353B;margin:16px 0 0}
+.pn-hyp b{font-weight:700;color:var(--panel-ink)}
+.pn-out{margin-top:22px;border-top:1px solid var(--panel-line);padding-top:18px}
+.pn-out .lab{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-muted)}
+.pn-out .v{font-size:31px;font-weight:700;letter-spacing:-.035em;color:var(--accent-ink);margin-top:7px;line-height:1}
+.pn-kept{margin-top:22px;font-size:12.5px;line-height:1.55;color:var(--panel-muted)}
+.pn-kept b{color:#2E353B;font-weight:700}
+.pn-foot{font-size:11.5px;line-height:1.55;color:var(--panel-muted);border-top:1px solid var(--panel-line);
+  padding-top:14px;margin-top:26px}
+.pn-sep{height:1px;background:var(--panel-line);margin:26px 0}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-in">
+    <div class="nav-brand">
+      <img src="img/logo-mark-a.png" alt="Easy Expense">
+      <b>Growth Audit</b><span>· Easy Expense</span>
+    </div>
+    <div class="nav-links">
+      <button class="on" data-view="over">Overview</button>
+      <button data-view="proto">Prototype</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= OVERVIEW ======================= -->
+<div class="view on" id="view-over">
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Growth Audit · October 2026</div>
+    <h1>Easy Expense</h1>
+    <p class="lede">Five ideas to unlock more revenue from the traffic you already have.</p>
+    <div class="meta">Prepared by <b>Adapty</b> · based on your live iOS flow, your App Store listing and your website</div>
+    <div class="herobtns"><button class="ghostbtn" data-demo><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg></span>Watch the 30-second walkthrough</button></div>
+    <div class="stats">
+      <div class="stat"><b>30,000+</b><span>apps run subscriptions<br>on Adapty</span></div>
+      <div class="stat"><b>5</b><span>ideas, each rebuilt<br>as a working screen</span></div>
+      <div class="stat"><b>0</b><span>design changes<br>to your art direction</span></div>
+    </div>
+
+    <div class="fb">
+      <div class="fb-k">Built in Adapty Flow Builder</div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Millions of dollars</b> in subscription revenue pass through Flow Builder every month.</p>
+      </div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Nearly 500 apps</b> actively build their paywalls and onboarding in it — plenty of them past $100K MRR.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">What this is</div>
+    <h2>We opened Easy Expense the way a new user does, then rebuilt the parts we think are leaving money on the table.</h2>
+    <p class="body">Adapty powers subscriptions for <b>30,000+ apps</b>, so we get to see what actually moves conversion and ARPU across the market rather than inside one app. We pointed that at Easy Expense: installed it, went through every screen up to the plans, read your App Store listing and your website, and looked for gaps between what you already have and what you currently show people.</p>
+    <p class="body">Your onboarding is already good. It asks real questions and your write-off loader actually uses the answers. What follows is five ideas, not fifteen. Each one is a hypothesis you can A/B test, and each one is built into a clickable prototype so you can see it rather than imagine it. <b>The prototype uses your design, not ours.</b></p>
+
+    <div class="notes">
+      <div class="note">
+        <h4>We did not redesign your app</h4>
+        <p>Every screen in the prototype is yours: your blue, your emoji cards, your write-off loader, your free-trial timeline and your navy Professional card. Only the order changed, plus a few things you already own but do not show at the right moment. This is not a design pitch.</p>
+      </div>
+      <div class="note">
+        <h4>You may have tested some of this</h4>
+        <p>We are working from the outside, so we cannot see your experiment history. If one of these is something you have already run, tell us and we will go deeper on the rest rather than repeat it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">The five ideas</div>
+    <h2>Ranked by what we would test first.</h2>
+    <p class="body">Each one links straight to the screen in the prototype.</p>
+
+    <div class="ideas">
+      <button class="idea" data-jump="offer">
+        <span class="no">01</span>
+        <span>
+          <h3>Give the paywall an X, and one offer behind it</h3>
+          <p>The free-trial screen has no close button today, only Logout in the corner. Someone not ready for 152,63 € a year has nowhere to go but out of the app. Let the X open one offer: your own Starter plan at €8.63 a month, next to what Professional adds.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>ARPU +10–15%</b><span>second chance</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">02</span>
+        <span>
+          <h3>Name their industry on the paywall</h3>
+          <p>Your loader finds 19 write-off categories for an acupuncturist, one by one. Two screens later, the paywall says “How your free trial works” to everyone. Put their industry and their categories in the headline, so the trial is for something they just saw.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +15–20%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="signup">
+        <span class="no">03</span>
+        <span>
+          <h3>Ask for the account after the paywall</h3>
+          <p>Sign-in is the second screen today: email, Apple or Google, before anyone has answered a question or seen a deduction. Your own headline for it, “Never lose another receipt with automated cloud backups”, lands better once they have started the trial.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +8%</b><b>ARPU +17%</b><span>in testing</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">04</span>
+        <span>
+          <h3>Put your 4.9 and your $500 million on the paywall</h3>
+          <p>A 4.9 from 2.5K App Store ratings, and “over $500 million in tax deductions and reimbursements” found, are on your listing and your website. Neither appears anywhere in the flow. They belong right above Start My Free Week.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–15%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="signup">
+        <span class="no">05</span>
+        <span>
+          <h3>Ask about tracking after the purchase</h3>
+          <p>The iOS tracking prompt pops over “Find your first tax deduction”, one tap before the price. It pulls attention at the moment you are building momentum. After sign-up, the same question costs you nothing.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–15%</b><span>to purchase</span></span>
+      </button>
+    </div>
+
+    <div class="band">
+      <div class="txt">
+        <div class="lab">Potential outcome</div>
+        <p>Run together, these five clear the path to the price and make the price screen about the person in front of it, with a second chance for anyone who says no.</p>
+      </div>
+      <div class="nums">
+        <div><b>+25%</b><span>CR to purchase</span></div>
+        <div><b>+30%</b><span>ARPU</span></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <div class="qr"><img src="img/qr.svg?v=1" alt="QR code for the prototype"><span><b>Or open it on your phone</b>Scan to try the flow in your hand.</span></div>
+      <button class="bigbtn" data-view="proto">Open the prototype
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="wrap">
+    Impact ranges are Adapty's expected effect from teardowns and A/B tests across subscription apps — not measured lift for Easy Expense. Every price, rating, quote and feature line here and in the prototype comes from Easy Expense's own App Store listing, website and in-app screens. Prices are shown in euros, exactly as the app displayed them on our test device.
+  </div>
+</div>
+</div><!-- /view-over -->
+
+<!-- ======================= PROTOTYPE ======================= -->
+<div class="view" id="view-proto">
+<div class="stage">
+  <div class="phonecol">
+    <div class="tools" id="tools">
+      <div class="seg" id="segTheme"><button data-theme="light" class="on">Light</button><button data-theme="dark">Dark</button></div>
+      <button class="demo-btn" id="demoBtn"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>30-sec walkthrough</button>
+    </div>
+    <div class="phone">
+      <div class="phone-in" id="phoneIn">
+        <div class="island"></div>
+        <div class="sbar" id="sbar">
+          <span>11:51</span>
+          <span class="glyphs">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7.5" width="3" height="3.5" rx="1"/><rect x="4.5" y="5.5" width="3" height="5.5" rx="1"/><rect x="9" y="3" width="3" height="8" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 10.5 5.6 7.9a3.4 3.4 0 0 1 4.8 0L8 10.5Zm0-5.6a6.4 6.4 0 0 0-4.5 1.9L1.7 4.9a9 9 0 0 1 12.6 0l-1.8 1.9A6.4 6.4 0 0 0 8 4.9Z"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".6" y=".6" width="20" height="10.8" rx="3" stroke="currentColor" stroke-opacity=".5"/><rect x="2.2" y="2.2" width="14" height="7.6" rx="1.8" fill="currentColor"/><path d="M22.3 4.1v3.8a2 2 0 0 0 0-3.8Z" fill="currentColor" fill-opacity=".5"/></svg>
+          </span>
+        </div>
+        <div class="homebar" id="homebar"></div>
+        <div class="finger" id="finger"></div>
+        <div class="screenwrap">
+
+<!-- WELCOME -->
+<section class="scr scr--welcome" data-id="welcome">
+  <div class="scr-top" style="padding-top:0"></div>
+  <div class="scr-body">
+    <img class="ee-mock" src="img/welcome-scan-a.png" alt="Easy Expense scanning a receipt: Hold Still – Detecting Vendor">
+    <img class="ee-logo keep" src="img/logo-full-a.png" alt="Easy Expense">
+  </div>
+  <div class="scr-foot">
+    <button class="ee-btn" data-go="goals">Get Started</button>
+    <p class="ee-signin">Already have an account? <b>Sign In</b></p>
+  </div>
+</section>
+
+<!-- GOALS -->
+<section class="scr" data-id="goals">
+  <div class="scr-top">
+    <div class="ee-prog" data-p="1"></div>
+    <h2 class="ee-h">What are your main goals we can help with?</h2>
+    <p class="ee-sub">Select all that apply</p>
+  </div>
+  <div class="scr-body"><div class="ee-opts" id="goalList"></div></div>
+  <div class="scr-foot"><button class="ee-btn" id="goalBtn" data-go="feats">Continue</button></div>
+</section>
+
+<!-- FEATURES -->
+<section class="scr" data-id="feats">
+  <div class="scr-top">
+    <div class="ee-prog" data-p="2"></div>
+    <h2 class="ee-h">Which expense report features do you need?</h2>
+    <p class="ee-sub">Customize your experience! Select all that apply.</p>
+  </div>
+  <div class="scr-body"><div class="ee-opts" id="featList"></div></div>
+  <div class="scr-foot"><button class="ee-btn" id="featBtn" data-go="team">Continue</button></div>
+</section>
+
+<!-- TEAM -->
+<section class="scr" data-id="team">
+  <div class="scr-top">
+    <div class="ee-prog" data-p="3"></div>
+    <h2 class="ee-h">Do you need to track other people's expenses?</h2>
+    <p class="ee-sub">Manage your team's receipts in one place</p>
+  </div>
+  <div class="scr-body"><div class="ee-opts" id="teamList"></div></div>
+  <div class="scr-foot"><button class="ee-btn" id="teamBtn" data-go="industry">Continue</button></div>
+</section>
+
+<!-- INDUSTRY -->
+<section class="scr" data-id="industry">
+  <div class="scr-top">
+    <div class="ee-prog" data-p="4"></div>
+    <h2 class="ee-h">What industry are you in?</h2>
+    <p class="ee-sub" style="margin-top:4px">We'll use this to personalize your categories.</p>
+    <label class="ee-search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5" stroke-linecap="round"/></svg><input id="indSearch" type="text" placeholder="Industry (e.g. &quot;Construction&quot;)" autocomplete="off"></label>
+  </div>
+  <div class="scr-body"><div id="indList"></div><div style="height:16px"></div></div>
+  <div class="scr-foot" style="padding-top:0;padding-bottom:12px"></div>
+</section>
+
+<!-- RECEIPTS -->
+<section class="scr" data-id="receipts">
+  <div class="scr-top">
+    <div class="ee-prog" data-p="5"></div>
+    <h2 class="ee-h">Where do your receipts live right now?</h2>
+    <p class="ee-sub">Select all that apply</p>
+  </div>
+  <div class="scr-body"><div class="ee-opts" id="recList"></div><div style="height:6px"></div></div>
+  <div class="scr-foot"><button class="ee-btn" id="recBtn" data-go="loader">Continue</button></div>
+</section>
+
+<!-- LOADER: their write-off analysis -->
+<section class="scr scr--load" data-id="loader">
+  <div class="scr-top" style="padding-top:50px"></div>
+  <div class="scr-body" id="loadBody">
+    <svg class="ee-squig" viewBox="0 0 120 120" id="squig"></svg>
+    <div class="ee-ai">AI ANALYSIS</div>
+    <h2 class="ee-loadh" id="loadH"></h2>
+    <div class="ee-proc">PROCESSING DEDUCTION CODES...</div>
+    <div class="ee-wohead" id="woHead"><b>WRITE OFF CATEGORIES</b><span class="ee-found" id="woFound">0 FOUND</span></div>
+    <div class="ee-wo" id="woList"></div>
+    <div style="height:14px"></div>
+  </div>
+  <div class="scr-foot" style="padding-top:8px"><button class="ee-btn" id="loadBtn" data-go="scan" disabled>Continue</button></div>
+</section>
+
+<!-- FIRST SCAN -->
+<section class="scr scr--scan" data-id="scan">
+  <div class="scr-top" style="padding-top:62px"><h2 class="ee-scanh">Find your first tax deduction</h2></div>
+  <div class="scr-body">
+    <img class="ee-scanimg" src="img/first-scan-a.png" alt="Scanning a receipt: Hold Still – Extracting Total">
+  </div>
+  <div class="scr-foot">
+    <button class="ee-btn" data-go="paywall">Scan a Receipt</button>
+    <button class="ee-link" data-go="paywall">Skip, I don't have any receipts</button>
+  </div>
+</section>
+
+<!-- PAYWALL: their free-trial timeline -->
+<section class="scr scr--pay" data-id="paywall">
+  <div class="scr-top" style="padding-top:54px">
+    <div class="ee-paybar">
+      <button class="ee-x" id="payClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <span class="ee-help">Help <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+  <div class="scr-body">
+    <h2 class="ee-payh" id="payH"></h2>
+    <p class="ee-paysub" id="paySub"></p>
+    <h3 class="ee-tlh">How your free trial works</h3>
+    <div class="ee-tl">
+      <div class="ee-ti done"><span class="c"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Set up Easy Expense</b><small>You successfully set up your workspace</small></span></div>
+      <div class="ee-ti now"><span class="c"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-1.9"/></svg></span><span><b>Today: Get Full Access</b><small>Save time with unlimited receipt scans</small></span></div>
+      <div class="ee-ti"><span class="c"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg></span><span><b>Day 5: Trial Reminder</b><small>We'll send you an email + notification.</small></span></div>
+      <div class="ee-ti" style="padding-bottom:6px"><span class="c"><svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/></svg></span><span><b>Day 7: Trial Ends</b><small>Forget to cancel? We'll help you get a full refund.</small></span></div>
+    </div>
+    <div class="ee-proof">
+      <div><b>4.9<span class="st">★★★★★</span></b><small>2.5K ratings on the App Store</small></div>
+      <div><b>$500M+</b><small>in tax deductions and reimbursements found</small></div>
+    </div>
+    <div style="height:8px"></div>
+  </div>
+  <div class="scr-foot">
+    <p class="ee-price">7 day free trial, then<br>152,63 € per year (€13/month)</p>
+    <button class="ee-softbtn" data-go="plans">View All Plans</button>
+    <button class="ee-btn" id="payCta">Start My Free Week</button>
+  </div>
+</section>
+
+<!-- ALL PLANS -->
+<section class="scr" data-id="plans">
+  <div class="scr-top" style="padding-top:54px">
+    <div class="ee-paybar">
+      <button class="ee-x" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="ee-help">Help <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+  <div class="scr-body">
+    <h2 class="ee-plh">Pick the plan that works for you</h2>
+    <p class="ee-plsub">No commitment - Cancel anytime</p>
+    <div class="ee-tog" id="perTog"><button data-per="m">Monthly</button><button data-per="y">Annual<small>Save up to 50%</small></button></div>
+    <div class="ee-pc pro">
+      <div class="ee-pop">★ MOST POPULAR</div>
+      <span class="ee-tag">Professional</span>
+      <p class="ee-pdesc">Best for small business owners and self employed individuals. Unlimited access to all our features to save you time and find thousands of tax deductions.</p>
+      <div class="ee-amt"><b id="proAmt"></b><span>PER MONTH</span></div>
+      <div class="ee-was" id="proWas"></div>
+      <div class="ee-trialn"><em>✓ 7-day free trial</em> • Cancel anytime</div>
+      <button class="ee-pcbtn" data-buy="trial">7-Day Free Trial</button>
+      <div class="ee-feats" id="proFeats"></div>
+    </div>
+    <div class="ee-pc">
+      <span class="ee-tag" style="margin-top:0">Starter</span>
+      <p class="ee-pdesc">Unlimited receipt scanning and expense reports.</p>
+      <div class="ee-amt"><b id="stAmt"></b><span>PER MONTH</span></div>
+      <div class="ee-was" id="stWas"></div>
+      <div class="ee-trialn"><em>✓ 7-day free trial</em> • Cancel anytime</div>
+      <button class="ee-pcbtn" data-buy="trial">7-Day Free Trial</button>
+      <div class="ee-feats" id="stFeats"></div>
+    </div>
+    <div class="ee-pc">
+      <span class="ee-tag" style="margin-top:0">Team</span>
+      <p class="ee-pdesc">For growing businesses managing expenses as a team.</p>
+      <div class="ee-amt"><b id="tmAmt"></b><span>PER USER<br>PER MONTH</span></div>
+      <div class="ee-was" id="tmWas"></div>
+      <div class="ee-trialn"><em>✓ 14-day free trial</em> • Cancel anytime • 4-seat minimum</div>
+      <button class="ee-pcbtn" data-buy="trial">Continue in Browser</button>
+    </div>
+    <div style="height:18px"></div>
+  </div>
+</section>
+
+<!-- OFFER ON CLOSE -->
+<section class="scr scr--offer sheet" data-id="offer">
+  <div class="scr-top" style="padding-top:54px">
+    <div class="ee-paybar">
+      <button class="ee-x" id="offClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <span class="ee-help">Help <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" stroke-linejoin="round"/></svg></span>
+    </div>
+  </div>
+  <div class="scr-body">
+    <h2 class="ee-oh" id="offH">Just need the receipts? Start with Starter.</h2>
+    <p class="ee-osub" id="offSub"></p>
+    <div class="ee-cmp" id="cmp"></div>
+    <div class="ee-ocard"><div class="t"><b>Starter · monthly</b>Unlimited receipt scanning and expense reports.</div><div class="p"><b>€8.63</b><span>PER MONTH</span></div></div>
+    <div style="height:8px"></div>
+  </div>
+  <div class="scr-foot">
+    <p class="ee-otrust">No commitment - Cancel anytime</p>
+    <button class="ee-btn" id="offerCta">Get Starter · €8.63 / month</button>
+    <button class="ee-link" id="offerBack" style="margin-top:12px">Or start the free week of Professional</button>
+  </div>
+</section>
+
+<!-- SIGN-UP, after purchase -->
+<section class="scr" data-id="signup">
+  <div class="scr-top" style="padding-top:58px;text-align:center"><span class="ee-paid" id="paidPill"><span class="ee-gck"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span id="paidTxt"></span></span></div>
+  <div class="scr-body">
+    <svg class="ee-shield" viewBox="0 0 56 62" fill="none" stroke="#1369E3" stroke-width="4.5" stroke-linejoin="round"><path d="M28 4 6 12v15c0 15 9.5 26 22 31 12.5-5 22-16 22-31V12z"/></svg>
+    <h2 class="ee-suh">Never lose another receipt with automated cloud backups</h2>
+    <div class="ee-div">EMAIL</div>
+    <button class="ee-email" data-signup style="width:100%"><svg viewBox="0 0 26 26"><rect x="3" y="6" width="20" height="14" rx="1.5"/><path d="m3.5 7 9.5 7 9.5-7"/></svg><span>example@mail.com</span></button>
+    <div class="ee-div">OR</div>
+    <button class="ee-apple" data-signup><svg width="16" height="19" viewBox="0 0 16 19" fill="#fff"><path d="M13.3 10.1c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8C3.8 4.8 2.4 5.7 1.6 7c-1.6 2.8-.4 6.9 1.2 9.1.8 1.1 1.7 2.3 2.8 2.3 1.1 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.2.9-1.3 1.2-2.5 1.2-2.6 0 0-2.3-.9-2.3-3.5ZM11 3.2c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2.1-.5 2.8-1.2Z"/></svg>Sign in with Apple</button>
+    <button class="ee-google" data-signup><svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Sign in with Google</button>
+    <div class="ee-agree"><span class="ck"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span>I agree to the Terms of Service, Privacy Policy and to receive important email updates regarding Easy Expense</span></div>
+  </div>
+  <div class="scr-foot"></div>
+  <div class="ee-att" id="att">
+    <div class="ee-attbox">
+      <div class="ic"><svg viewBox="0 0 38 38"><circle cx="9" cy="8" r="4"/><path d="M9 12v6c0 4 3 6 7 6h4c4 0 7 2 7 6v2" stroke-linecap="round"/></svg></div>
+      <h5>Allow “Easy Expense” to track your activity across other companies’ apps and websites?</h5>
+      <p>Easy Expense would like to track where users downloaded the app from.</p>
+      <button data-go="done">Ask App Not to Track</button>
+      <button data-go="done">Allow</button>
+    </div>
+  </div>
+</section>
+
+<!-- DONE -->
+<section class="scr scr--done" data-id="done">
+  <div class="scr-top"></div>
+  <div class="scr-body"><p class="ee-setup">Setting everything up...</p><span class="ee-dot"></span></div>
+  <div class="scr-foot"></div>
+</section>
+
+        </div>
+      </div>
+    </div>
+    <div class="demo-cap hidden" id="demoCap"><div class="bar"><i id="demoProg"></i></div><p id="demoTxt"></p><button id="demoStop">Stop</button></div>
+    <div class="chips" id="chips"></div>
+    <p class="chiphint">Jump to any screen — answers already filled in.</p>
+    <div class="qr"><img src="img/qr.svg?v=1" alt="QR code for this prototype"><span><b>Open it on your phone</b>Scan to try the flow in your hand.</span></div>
+  </div>
+  <div class="panelcol"><div class="pn" id="panel"></div></div>
+</div>
+</div><!-- /view-proto -->
+
+<script>
+/* ================= their questions, verbatim ================= */
+var GOALS=[
+  {k:'budget',e:'📊',t:'Budgeting',d:'Insights into spending and budgets'},
+  {k:'reports',e:'📝',t:'Expense Reports',d:'Professional PDF reports and reimbursements'},
+  {k:'tax',e:'💸',t:'Tax Deductions',d:'Maximize tax savings and deductions'}];
+var FEATS=[
+  {k:'approve',e:'✅',t:'Approve Expenses',d:"Approve employees' expenses and reports"},
+  {k:'scan',e:'🧾',t:'Scan Receipts',d:'AI receipt scanner'},
+  {k:'email',e:'📧',t:'Upload Email Receipts',d:'Forward receipts from your email'},
+  {k:'mileage',e:'🚗',t:'Track Mileage',d:'GPS automated mileage tracking'}];
+var TEAM=[
+  {k:'me',t:'Just Me',d:'Track your transactions alone'},
+  {k:'team',t:'Team Tracking',d:'Invite your employees and get all your data in one place'}];
+var REC=[
+  {k:'folder',e:'🗃️',t:'Physical Folder',d:'Paper receipts in a folder, drawer, or shoebox'},
+  {k:'camera',e:'📷',t:'Camera Roll',d:"Photos saved in my phone's gallery"},
+  {k:'cloud',e:'☁️',t:'Cloud Storage',d:'Google Drive, Dropbox, or similar'},
+  {k:'email',e:'📧',t:'Email',d:'Sitting in my inbox'},
+  {k:'app',e:'📱',t:'Another App',d:'Scattered across other apps'},
+  {k:'none',e:'🤷‍♂️',t:"I Don't Keep Them",d:"I usually don't save my receipts"}];
+var IND=[
+  {g:'Most Common Industries',items:[['construction','🏗️','Construction/ Trades','Construction'],['creator','🎥','Content Creator/ Influencer','Content Creators'],['health','🏥','Health Care','Health Care'],['sales','💼','Sales','Sales'],['realestate','🏠','Real Estate','Real Estate']]},
+  {g:'Building Services',items:[['hvac','❄️','HVAC Services','HVAC Services'],['carpentry','🔨','Carpentry Contractors','Carpentry'],['electrical','⚡','Electrical Contractors','Electrical Contractors'],['general','🏗️','General Contractors','General Contractors'],['otherbuild','🔧','Other Building Services','Building Services'],['av','📺','Audio/Visual Services','Audio/Visual Services']]},
+  {g:'Medical Services',items:[['acupuncture','🪡','Acupuncture','Acupuncture'],['assisted','🏡','Assisted Living','Assisted Living'],['chiro','👐','Chiropractors','Chiropractors'],['dentist','🦷','Dentists And Orthodontists','Dentists'],['doctors','👩‍⚕️','Doctors And Physicians','Doctors'],['wellness','🌿','Health And Wellness','Health And Wellness']]}];
+var INDK={}; IND.forEach(function(g){ g.items.forEach(function(i){ INDK[i[0]]={e:i[1],n:i[2],s:i[3]}; }); });
+/* write-off categories exactly as their loader names them */
+var CATS=[['🏢','Rent of Business Space'],['👨‍🔧','Repairs & Maintenance'],['🚀','Shipping, Freight & Delivery'],['🖥️','Software Subscriptions'],
+  ['🖇️','Supplies & Materials'],['🛠️','Tools & Equipment'],['💵','Commissions & Fees'],['👷','Contractors'],['📦','Cost of Goods Sold'],
+  ['🛡️','Insurance'],['🏦','Interest'],['👔','Legal & Professional Services']];
+var MILE=['🚗','Vehicle Mileage · $0.73 / mile'];
+var PRO_F=['Unlimited receipt scanning','Unlimited expense reports','Email receipt forwarding','Invite up to 2 others','Connect bank accounts, cards, and email','Unlimited workspaces','Automatic mileage tracking','Statement reconciliation','Approval workflows'];
+var ST_F=['Unlimited receipt scanning','Unlimited expense reports','Email receipt forwarding'];
+var PRICE={m:{pro:['€25.22',''],st:['€8.63',''],tm:['$8','']},
+  y:{pro:['€12.72','<s>€302.64</s> 152,63 € billed annually'],st:['€6.67','<s>€103.56</s> 79,99 € billed annually'],tm:['$6','<s>$96</s> $72 billed annually per user']}};
+
+/* ================= state ================= */
+var S0={theme:'light'};
+function defaults(){ return {theme:S0.theme, goals:['tax','reports'], feats:['scan','email'], team:'me', industry:'construction',
+  receipts:['folder','camera'], per:'y', bought:'trial', q:''}; }
+var S=defaults();
+function has(a,k){ return a.indexOf(k)>-1; }
+function toggle(a,k){ var i=a.indexOf(k); if(i>-1) a.splice(i,1); else a.push(k); }
+function joinL(a){ return a.length<2?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+function cats(){ var c=CATS.slice(); if(has(S.feats,'mileage')) c.splice(2,0,MILE); return c; }
+var ck='<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+var gck='<span class="ee-gck">'+ck+'</span>';
+
+/* ================= builders ================= */
+function optRow(o,on,ring){ return '<button class="ee-opt'+(on?' on':'')+'" data-v="'+o.k+'">'+(ring?'<span class="ring">'+ck+'</span>':'<span class="em">'+o.e+'</span>')+'<span><b>'+o.t+'</b><small>'+o.d+'</small></span></button>'; }
+function build(){
+  document.querySelectorAll('.ee-prog').forEach(function(p){ var n=+p.dataset.p, h=''; for(var i=1;i<=5;i++) h+='<i class="'+(i<=n?'on':'')+'"></i>'; p.innerHTML=h; });
+  var gl=document.getElementById('goalList'); gl.innerHTML=GOALS.map(function(o){ return optRow(o); }).join('');
+  gl.querySelectorAll('.ee-opt').forEach(function(b){ b.onclick=function(){ toggle(S.goals,b.dataset.v); syncScreen(); }; });
+  var fl=document.getElementById('featList'); fl.innerHTML=FEATS.map(function(o){ return optRow(o); }).join('');
+  fl.querySelectorAll('.ee-opt').forEach(function(b){ b.onclick=function(){ toggle(S.feats,b.dataset.v); syncScreen(); }; });
+  var tl=document.getElementById('teamList'); tl.innerHTML=TEAM.map(function(o){ return optRow(o,false,true); }).join('');
+  tl.querySelectorAll('.ee-opt').forEach(function(b){ b.onclick=function(){ S.team=b.dataset.v; syncScreen(); }; });
+  var rl=document.getElementById('recList'); rl.innerHTML=REC.map(function(o){ return optRow(o); }).join('');
+  rl.querySelectorAll('.ee-opt').forEach(function(b){ b.onclick=function(){ var k=b.dataset.v;
+    if(k==='none') S.receipts=has(S.receipts,'none')?[]:['none']; else { S.receipts=S.receipts.filter(function(x){return x!=='none';}); toggle(S.receipts,k); } syncScreen(); }; });
+  document.getElementById('proFeats').innerHTML=PRO_F.map(function(f){ return '<div>'+gck+'<span>'+f+'</span></div>'; }).join('');
+  document.getElementById('stFeats').innerHTML=ST_F.map(function(f){ return '<div>'+gck+'<span>'+f+'</span></div>'; }).join('');
+  /* offer comparison: rows from their own plan cards */
+  var rows=[['Unlimited receipt scanning',1,1],['Unlimited expense reports',1,1],['Email receipt forwarding',1,1],['Connect bank accounts, cards, and email',0,1],['Automatic mileage tracking',0,1],['Invite up to 2 others',0,1]];
+  document.getElementById('cmp').innerHTML='<div class="row hd"><span style="text-align:left">What you get</span><span class="st">Starter</span><span>Pro</span></div>'+
+    rows.map(function(r){ return '<div class="row"><span>'+r[0]+'</span><span class="c">'+(r[1]?gck:'<i class="dash"></i>')+'</span><span class="c">'+gck+'</span></div>'; }).join('');
+  buildInd();
+}
+function buildInd(){
+  var q=S.q.trim().toLowerCase(), h='';
+  IND.forEach(function(g){ var it=g.items.filter(function(i){ return !q || i[2].toLowerCase().indexOf(q)>-1; });
+    if(!it.length) return; h+='<div class="ee-grp">'+g.g+'</div>';
+    it.forEach(function(i){ h+='<button class="ee-ind'+(S.industry===i[0]?' on':'')+'" data-v="'+i[0]+'"><span class="em">'+i[1]+'</span>'+i[2]+'</button>'; }); });
+  var el=document.getElementById('indList'); el.innerHTML=h||'<p class="ee-sub">No match — try “Construction”.</p>';
+  el.querySelectorAll('.ee-ind').forEach(function(b){ b.onclick=function(){ S.industry=b.dataset.v; buildInd(); syncScreen();
+    setTimeout(function(){ if(cur==='industry') go('receipts'); },260); }; });
+}
+document.getElementById('indSearch').addEventListener('input',function(e){ S.q=e.target.value; buildInd(); });
+
+/* their loader mark: stacked wavy rings */
+(function(){ var h=''; for(var j=0;j<12;j++){ var d='', r0=40+j*.55, ph=j*.09;
+  for(var a=0;a<=360;a+=4){ var t=a*Math.PI/180, r=r0+4.2*Math.sin(12*t+ph); d+=(a?'L':'M')+(60+r*Math.cos(t)).toFixed(2)+' '+(60+r*Math.sin(t)).toFixed(2); }
+  h+='<path d="'+d+'Z" fill="none" stroke="#2A2A2A" stroke-opacity="'+(0.18+j*.05).toFixed(2)+'" stroke-width=".7"/>'; }
+  document.getElementById('squig').innerHTML=h; })();
+
+/* ================= everything downstream reads S ================= */
+function syncScreen(){
+  document.querySelectorAll('#goalList .ee-opt').forEach(function(b){ b.classList.toggle('on',has(S.goals,b.dataset.v)); });
+  document.querySelectorAll('#featList .ee-opt').forEach(function(b){ b.classList.toggle('on',has(S.feats,b.dataset.v)); });
+  document.querySelectorAll('#teamList .ee-opt').forEach(function(b){ b.classList.toggle('on',S.team===b.dataset.v); });
+  document.querySelectorAll('#recList .ee-opt').forEach(function(b){ b.classList.toggle('on',has(S.receipts,b.dataset.v)); });
+  [['goalBtn',S.goals],['featBtn',S.feats],['recBtn',S.receipts]].forEach(function(p){ var b=document.getElementById(p[0]);
+    b.disabled=!p[1].length; b.textContent=p[1].length?'Continue':'Select all that apply'; });
+  var tb=document.getElementById('teamBtn'); tb.disabled=!S.team;
+
+  var ind=INDK[S.industry], n=cats().length;
+  document.getElementById('loadH').innerHTML='Analyzing deductions for <em>'+ind.n.replace('/ ','/&#8203;')+'</em> in <em>your location</em>';
+  /* paywall: their industry and categories in the headline */
+  document.getElementById('payH').innerHTML='Your <em>'+n+' write-off categories</em> for '+ind.s+' are ready';
+  var gs=GOALS.filter(function(g){ return has(S.goals,g.k); }).map(function(g){ return g.t.toLowerCase(); });
+  var rec={folder:'your paper folder',camera:'your camera roll',cloud:'cloud storage',email:'your inbox',app:'other apps'};
+  var rs=S.receipts.filter(function(k){ return rec[k]; }).map(function(k){ return rec[k]; });
+  var sub=(gs.length?'Set up for '+joinL(gs):'Set up for you');
+  sub+= rs.length ? ', with receipts from '+joinL(rs.slice(0,2))+'.' : '. Start scanning today.';
+  if(has(S.feats,'mileage')) sub=sub.replace(/\.$/,'. Mileage included.');
+  document.getElementById('paySub').textContent=sub;
+  /* plans */
+  var P=PRICE[S.per];
+  document.querySelectorAll('#perTog button').forEach(function(b){ b.classList.toggle('on',b.dataset.per===S.per); });
+  document.getElementById('proAmt').textContent=P.pro[0]; document.getElementById('proWas').innerHTML=P.pro[1];
+  document.getElementById('stAmt').textContent=P.st[0]; document.getElementById('stWas').innerHTML=P.st[1];
+  document.getElementById('tmAmt').textContent=P.tm[0]; document.getElementById('tmWas').innerHTML=P.tm[1];
+  /* offer: names what they asked for */
+  var want=FEATS.filter(function(f){ return has(S.feats,f.k) && (f.k==='scan'||f.k==='email'); }).map(function(f){ return f.t.toLowerCase(); });
+  document.getElementById('offSub').textContent = want.length ? 'You asked for '+joinL(want)+'. Starter covers '+(want.length>1?'both':'it')+', for less.' : 'Starter covers your receipts and expense reports, for less.';
+  document.getElementById('paidTxt').textContent = S.bought==='starter' ? 'Starter is active' : 'Your free week has started';
+}
+
+/* ================= router ================= */
+var ORDER=['welcome','goals','feats','team','industry','receipts','loader','scan','paywall','plans','offer','signup','done'];
+var CHIPS=['welcome','goals','feats','team','industry','receipts','loader','scan','paywall','plans','offer','signup'];
+var LABEL={welcome:'Welcome',goals:'Goals',feats:'Features',team:'Team',industry:'Industry',receipts:'Receipts',loader:'Write-off analysis',scan:'First scan',paywall:'Paywall',plans:'All plans',offer:'Offer on close',signup:'Sign-up',done:'Done'};
+var scr={}, hist=[], cur='welcome', loadTimers=[];
+document.querySelectorAll('.scr').forEach(function(s){ scr[s.dataset.id]=s; });
+function chrome(){ var dark=S.theme==='dark';
+  document.getElementById('sbar').classList.toggle('light',dark); document.getElementById('homebar').classList.toggle('light',dark); }
+function enter(id){ chrome(); paintChips(); paintPanel(); clearLoad(); document.getElementById('att').classList.remove('on');
+  if(id==='loader') runLoader(); if(id==='industry'){ S.q=''; document.getElementById('indSearch').value=''; buildInd(); } }
+function go(id,opts){
+  opts=opts||{}; if(id===cur) return;
+  var from=scr[cur], to=scr[id];
+  if(!opts.back) hist.push(cur);
+  if(from){ from.classList.remove('is-active');
+    if(!to.classList.contains('sheet') && !from.classList.contains('sheet')) from.classList.add('is-past'); }
+  Object.keys(scr).forEach(function(k){ if(k!==id&&k!==cur) scr[k].classList.remove('is-active'); });
+  if(to.classList.contains('sheet')) from.classList.add('is-active');
+  to.classList.remove('is-past'); to.classList.add('is-active');
+  if(from && from.classList.contains('sheet')) Object.keys(scr).forEach(function(k){ if(k!==id) scr[k].classList.remove('is-active'); });
+  cur=id; enter(id);
+}
+function back(){
+  if(!hist.length) return;
+  var prev=hist.pop();
+  scr[cur].classList.remove('is-active');
+  scr[prev].classList.remove('is-past'); scr[prev].classList.add('is-active');
+  cur=prev; enter(prev);
+}
+function jump(id){
+  var i=ORDER.indexOf(id);
+  Object.keys(scr).forEach(function(k){ scr[k].classList.add('nofx'); scr[k].classList.remove('is-active','is-past'); });
+  hist=ORDER.slice(0,i<0?0:i).filter(function(k){ return k!=='plans' && k!=='offer'; });
+  if(id==='offer') scr.paywall.classList.add('is-active');
+  if(id==='signup' && !S._keepBought) S.bought='trial';
+  scr[id].classList.add('is-active'); cur=id;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    Object.keys(scr).forEach(function(k){ scr[k].classList.remove('nofx'); }); }); });
+  syncScreen(); enter(id);
+  var b=scr[id].querySelector('.scr-body'); if(b) b.scrollTop=0;
+}
+var chipBuilt=false;
+function paintChips(){
+  var c=document.getElementById('chips');
+  if(!chipBuilt){ chipBuilt=true;
+    CHIPS.forEach(function(id){ var b=document.createElement('button'); b.className='chip'+(id==='offer'?' offer':''); b.textContent=LABEL[id];
+      b.dataset.id=id; b.onclick=function(){ stopDemo(); jump(id); }; c.appendChild(b); }); }
+  c.querySelectorAll('.chip').forEach(function(b){ b.classList.toggle('on', b.dataset.id===cur); });
+}
+function clearLoad(){ loadTimers.forEach(clearTimeout); loadTimers=[]; }
+function tint(i,n){ var h=255-Math.round(i*(135/Math.max(1,n-1))); return {bg:'hsl('+h+',62%,95%)',ink:'hsl('+h+',48%,34%)',line:'hsl('+h+',40%,86%)'}; }
+function runLoader(){
+  var k=demo.on?0.48:1, list=cats(), wl=document.getElementById('woList'), head=document.getElementById('woHead'), f=document.getElementById('woFound');
+  var dark=S.theme==='dark';
+  wl.innerHTML=list.map(function(c,i){ var t=tint(i,list.length);
+    return '<div class="ee-wrow" style="color:'+(dark?'hsl('+(255-Math.round(i*(135/(list.length-1))))+',60%,74%)':t.ink)+';border-color:'+(dark?'':t.line)+'"><span class="ic" style="background:'+t.bg+'">'+c[0]+'</span>'+c[1]+'</div>'; }).join('');
+  head.classList.remove('on'); f.textContent='0 FOUND'; document.getElementById('loadBtn').disabled=true;
+  var body=document.getElementById('loadBody'); body.scrollTop=0;
+  loadTimers.push(setTimeout(function(){ head.classList.add('on'); },900*k));
+  var rows=wl.querySelectorAll('.ee-wrow');
+  rows.forEach(function(r,i){ loadTimers.push(setTimeout(function(){ r.classList.add('on'); f.textContent=(i+1)+' FOUND';
+    var y=r.offsetTop+r.offsetHeight+14-body.clientHeight; if(y>body.scrollTop) body.scrollTo({top:y,behavior:'smooth'}); },(1200+i*330)*k)); });
+  loadTimers.push(setTimeout(function(){ document.getElementById('loadBtn').disabled=false; },(1300+rows.length*330)*k));
+}
+
+/* ================= wiring ================= */
+document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ if(!b.disabled) go(b.dataset.go); }); });
+document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click',back); });
+document.querySelectorAll('#perTog button').forEach(function(b){ b.addEventListener('click',function(){ S.per=b.dataset.per; syncScreen(); }); });
+document.getElementById('payClose').addEventListener('click',function(){ go('offer'); });
+document.getElementById('payCta').addEventListener('click',function(){ S.bought='trial'; syncScreen(); go('signup'); });
+document.querySelectorAll('[data-buy]').forEach(function(b){ b.addEventListener('click',function(){ S.bought='trial'; syncScreen(); go('signup'); }); });
+document.getElementById('offClose').addEventListener('click',function(){ go('paywall',{back:true}); hist.pop(); });
+document.getElementById('offerBack').addEventListener('click',function(){ go('paywall',{back:true}); hist.pop(); });
+document.getElementById('offerCta').addEventListener('click',function(){ S.bought='starter'; syncScreen(); go('signup'); });
+document.querySelectorAll('[data-signup]').forEach(function(b){ b.addEventListener('click',function(){ document.getElementById('att').classList.add('on'); }); });
+
+function setSeg(id,attr,val){ document.querySelectorAll('#'+id+' button').forEach(function(b){ b.classList.toggle('on', b.dataset[attr]===val); }); }
+function setTheme(th){ S.theme=th; S0.theme=th; document.getElementById('phoneIn').classList.toggle('dark',th==='dark'); setSeg('segTheme','theme',th); chrome(); }
+document.querySelectorAll('#segTheme button').forEach(function(b){ b.addEventListener('click',function(){ setTheme(b.dataset.theme); if(cur==='loader') runLoader(); }); });
+
+/* ================= the 30-second walkthrough ================= */
+var demo={tok:0,on:false,t0:0,iv:null}, finger=document.getElementById('finger'), phoneIn=document.getElementById('phoneIn');
+function W(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function cap(txt){ document.getElementById('demoTxt').textContent=txt; }
+async function tap(sel,tok){
+  if(demo.tok!==tok) throw 0;
+  var el=document.querySelector(sel); if(!el) return;
+  var r=el.getBoundingClientRect(), p=phoneIn.getBoundingClientRect(), z=p.width/phoneIn.offsetWidth||1;
+  finger.style.left=((r.left-p.left+r.width/2)/z)+'px'; finger.style.top=((r.top-p.top+r.height/2)/z)+'px';
+  finger.classList.add('show'); await W(380); if(demo.tok!==tok) throw 0;
+  finger.classList.add('press'); await W(120); finger.classList.remove('press'); el.click(); await W(160);
+  if(demo.tok!==tok) throw 0;
+}
+async function pause(ms,tok){ await W(ms); if(demo.tok!==tok) throw 0; }
+function startDemo(){
+  stopDemo(); var tok=++demo.tok; demo.on=true; demo.t0=Date.now();
+  var th=S.theme; S=defaults(); S.theme=th; build(); jump('welcome');
+  document.getElementById('demoCap').classList.remove('hidden');
+  demo.iv=setInterval(function(){ document.getElementById('demoProg').style.width=Math.min(100,(Date.now()-demo.t0)/290)+'%'; },200);
+  (async function(){
+    try{
+      cap('No sign-in wall: Get Started goes straight to your questions.'); await pause(1400,tok);
+      await tap('[data-id=welcome] .ee-btn',tok);
+      cap('Your goal question, untouched.'); await pause(500,tok);
+      await tap('#goalList [data-v=budget]',tok); await pause(300,tok); await tap('#goalBtn',tok);
+      cap('The features they need. Say, mileage too.'); await pause(500,tok);
+      await tap('#featList [data-v=mileage]',tok); await pause(300,tok); await tap('#featBtn',tok);
+      cap('Just them, or a team.'); await pause(400,tok);
+      await tap('#teamList [data-v=me]',tok); await pause(250,tok); await tap('#teamBtn',tok);
+      cap('Their industry. Pick Real Estate.'); await pause(500,tok);
+      await tap('#indList [data-v=realestate]',tok); await pause(700,tok);
+      cap('Where their receipts live today.'); await pause(400,tok);
+      await tap('#recList [data-v=email]',tok); await pause(300,tok); await tap('#recBtn',tok);
+      cap('Your write-off analysis reads the answers back, mileage included.'); await pause(3100,tok);
+      await tap('#loadBtn',tok);
+      cap('Their first scan. The tracking prompt no longer pops up here.'); await pause(1200,tok);
+      await tap('[data-id=scan] .ee-btn',tok);
+      cap('The paywall names their industry and their categories, with your 4.9 and $500 million.'); await pause(2600,tok);
+      cap('They close it. One offer: your own Starter plan, next to what Pro adds.'); await tap('#payClose',tok); await pause(2400,tok);
+      cap('That is the flow. Sign-up and the tracking prompt now come after purchase.');
+      finger.classList.remove('show'); await pause(2200,tok); stopDemo();
+    }catch(e){}
+  })();
+}
+function stopDemo(){ if(!demo.on) return; demo.tok++; demo.on=false; clearInterval(demo.iv); finger.classList.remove('show','press');
+  document.getElementById('demoCap').classList.add('hidden'); }
+document.getElementById('demoBtn').addEventListener('click',startDemo);
+document.getElementById('demoStop').addEventListener('click',stopDemo);
+phoneIn.addEventListener('pointerdown',function(e){ if(e.isTrusted && demo.on) stopDemo(); });
+</script>
+<script>
+/* ---- the short panel: hypothesis + potential outcome, nothing else ---- */
+var PANEL = {
+welcome:{ctx:true,t:'Welcome',
+ kept:'Your welcome screen untouched: the scanning phone, your logo, Get Started and “Already have an account? Sign In”. The one change is what Get Started opens: your first question instead of the sign-in screen (idea 03).'},
+goals:{ctx:true,t:'What are your main goals we can help with?',
+ kept:'Untouched: your three emoji cards in your order. The answer now also shapes the line under the paywall headline.'},
+feats:{ctx:true,t:'Which expense report features do you need?',
+ kept:'Untouched: all four features, your copy. Pick Track Mileage and your write-off analysis adds mileage to the list.'},
+team:{ctx:true,t:'Do you need to track other people’s expenses?',
+ kept:'Untouched: Just Me and Team Tracking with your check rings.'},
+industry:{ctx:true,t:'What industry are you in?',
+ kept:'Untouched: your search field and your grouped industry list. Your country question sits right before this one in your flow and stays exactly where it is.'},
+receipts:{ctx:true,t:'Where do your receipts live right now?',
+ kept:'Untouched: all six answers. The ones they pick are named again under the paywall headline.'},
+loader:{ctx:true,t:'Analyzing deductions',
+ kept:'This is already the strongest screen in your flow, so we left it alone: your AI Analysis mark, the industry in blue, the write-off categories arriving one by one with the counter. It is what the paywall headline now builds on.'},
+scan:{ctx:true,t:'Find your first tax deduction',
+ kept:'Untouched: the scanning phone, Scan a Receipt and the skip link. In your current flow the iOS tracking prompt opens over this screen; here it does not (idea 05).'},
+paywall:{n:2,t:'Name their industry on the paywall',
+ hyp:'Try opening the paywall on their industry and the number of write-off categories your analysis just found, <b>because today it says “How your free trial works” to everyone, two screens after the most personal moment in your flow</b>. Go back and pick another industry; the headline follows.',
+ out:'CR +15–20%',
+ n2:4,
+ hyp2:'Try your 4.9 from 2.5K ratings and “over $500 million” found right above the trial price, <b>because both are on your listing and website and neither appears in the flow</b>.',
+ out2:'CR +10–15%',
+ kept:'Your free-trial timeline exactly as it ships: the struck-through setup step, the lilac track, Day 5 reminder and Day 7 copy, your price line, View All Plans and Start My Free Week. Logout becomes an X.'},
+plans:{ctx:true,t:'Pick the plan that works for you',
+ kept:'Your plans screen as it ships: the Monthly / Annual toggle, the navy Professional card, Starter and Team, with your prices and strikethroughs. Toggle it; it works.'},
+offer:{n:1,t:'Give the paywall an X, and one offer behind it',
+ hyp:'Try letting the X open your own Starter plan at €8.63 a month, paid today, next to what Professional adds, <b>because today the only way past the trial screen is Logout, so anyone not ready for 152,63 € a year simply leaves</b>. In business apps, people who pay up front are usually worth more than trial starts.',
+ out:'ARPU +10–15%',
+ kept:'Your navy card, your green checks, your blue button and your plan copy. Every row in the comparison is from your own Professional and Starter cards; €8.63 is your own monthly Starter price.'},
+signup:{n:3,t:'Ask for the account after the paywall',
+ hyp:'Try asking for the account here, right after they start the trial, <b>because today it is the second screen, before a single question or deduction, and a sign-up wall that early costs both conversion and revenue</b>.',
+ out:'CR +8% · ARPU +17%',
+ n2:5,
+ hyp2:'Try showing the iOS tracking prompt after sign-up, <b>because today it opens over “Find your first tax deduction”, one tap before the price</b>. Tap any sign-in button to see it in its new place.',
+ out2:'CR +10–15%',
+ kept:'Your sign-in screen and the system prompt word for word: the shield, “Never lose another receipt with automated cloud backups”, email, Apple, Google and the consent line. The green pill is the only addition.'},
+done:{ctx:true,t:'Setting everything up...',
+ kept:'Your own hand-over into the app, unchanged.'}
+};
+
+function outBlock(lab,val){ return '<div class="pn-out"><div class="lab">'+lab+'</div><div class="v">'+val+'</div></div>'; }
+function paintPanel(){
+  var d=PANEL[cur]; if(!d) return;
+  var h='';
+  if(d.ctx){
+    h += '<div class="pn-n ctx">Context · no change proposed</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<div class="pn-kept">'+d.kept+'</div>';
+  } else {
+    h += '<div class="pn-n">Idea '+d.n+' of 5</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<p class="pn-hyp">'+d.hyp+'</p>'
+       + outBlock('Potential outcome · based on Adapty data', d.out);
+    if(d.hyp2){
+      h += '<div class="pn-sep"></div>'
+         + '<div class="pn-n">Idea '+d.n2+' of 5</div>'
+         + '<p class="pn-hyp" style="margin-top:12px">'+d.hyp2+'</p>'
+         + outBlock('Potential outcome · based on Adapty data', d.out2);
+    }
+    h += '<div class="pn-kept"><b>Your design, unchanged.</b> '+d.kept+'</div>';
+  }
+  h += '<div class="pn-foot">Ranges are Adapty’s expected effect from tests across 30,000+ subscription apps — not measured lift for Easy Expense. '
+     + 'Prices, ratings, quotes and feature lines come from your own published material.</div>';
+  document.getElementById('panel').innerHTML = h;
+}
+
+/* ---- views, jumps from the overview ---- */
+function showView(v){
+  if(v!=='proto') stopDemo();
+  document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('on'); });
+  document.getElementById('view-'+v).classList.add('on');
+  document.querySelectorAll('.nav-links button[data-view]').forEach(function(b){ b.classList.toggle('on', b.dataset.view===v); });
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ showView(b.dataset.view); }); });
+document.querySelectorAll('.idea[data-jump]').forEach(function(b){
+  b.addEventListener('click',function(){ showView('proto'); jump(b.dataset.jump); });
+});
+document.querySelectorAll('[data-demo]').forEach(function(b){ b.addEventListener('click',function(){ showView('proto'); startDemo(); }); });
+
+build();
+scr.welcome.classList.add('is-active');
+syncScreen(); chrome(); paintChips(); paintPanel();
+if(/[?&]open=proto/.test(location.search)) showView('proto');
+</script>
+</body>
+</html>
